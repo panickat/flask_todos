@@ -8,10 +8,12 @@ pylint = "*"
 black = "*"
 
 [packages]
-Flask = "*"
+Flask = "==1.0.2"
 Flask-Bootstrap = "*"
 Flask-WTF = "*"
 Flask-Testing = "*"
+blinker = "==1.4"
+Werkzeug = "==0.14.1"
 
 [requires]
 python_version = "3.7"
