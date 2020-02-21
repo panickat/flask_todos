@@ -11,6 +11,7 @@ black = "*"
 Flask = "*"
 Flask-Bootstrap = "*"
 Flask-WTF = "*"
+Flask-Testing = "*"
 
 [requires]
 python_version = "3.7"
