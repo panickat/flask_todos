@@ -5,3 +5,4 @@ flask-bootstrap
 flask-wtf
 flask-testing
 firebase-admin
+flask-login
