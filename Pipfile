@@ -14,6 +14,7 @@ Flask-WTF = "*"
 Flask-Testing = "*"
 blinker = "==1.4"
 Werkzeug = "==0.14.1"
+firebase-admin = "*"
 
 [requires]
 python_version = "3.7"
