@@ -1,3 +1,6 @@
 {% macro render_todo(todo) %}
-    <li>Reportar a:  <span>{{ todo.to_dict().description }}</span></li>
+    <li class="list-group-item">
+        <span class="badge">{{ todo.to_dict().done}}</span>
+        Descripcion: <span>{{ todo.to_dict().description }}</span>
+    </li>
 {% endmacro %}
