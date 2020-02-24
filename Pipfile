@@ -13,7 +13,7 @@ Flask-Bootstrap = "*"
 Flask-WTF = "*"
 Flask-Testing = "*"
 blinker = "==1.4"
-Werkzeug = "==0.14.1"
+Werkzeug = "==0.15.3"
 firebase-admin = "*"
 Flask-Login = "*"
 
