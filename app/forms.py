@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms.fields import StringField, PasswordField,SubmitField,HiddenField
+from wtforms.fields import StringField, PasswordField,SubmitField
 from wtforms.validators import DataRequired
 
 class LoginForm(FlaskForm):
@@ -7,3 +7,6 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Enviar')
     
+class TodoForm(FlaskForm):
+    description = StringField('Descripción', validators=[DataRequired()])
+    submit = SubmitField('Crear')
