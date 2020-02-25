@@ -1,10 +1,10 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
-{% macro render_todo(todo, delete_form, update_form) %}
+{% macro render_daily(daily, delete_form, update_form) %}
     <li class="list-group-item">
-        <span class="badge">{{ todo.to_dict().done}}</span>
-        Descripcion: <span>{{ todo.to_dict().description }}</span>
-        {{ wtf.quick_form(delete_form, action=url_for('delete',todo_id=todo.id)) }}
-        {{ wtf.quick_form(update_form, action=url_for('update',todo_id=todo.id, done=todo.to_dict().done)) }}
+        <span class="badge">{{ daily.to_dict().done}}</span>
+        Descripcion: <span>{{ daily.to_dict().description }}</span>
+        {{ wtf.quick_form(delete_form, action=url_for('delete',daily_id=daily.id)) }}
+        {{ wtf.quick_form(update_form, action=url_for('update',daily_id=daily.id, done=daily.to_dict().done)) }}
     </li>
 {% endmacro %}

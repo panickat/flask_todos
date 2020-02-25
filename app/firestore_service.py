@@ -17,22 +17,22 @@ def user_put(user_data):
     user_ref = db.collection('users').document(user_data.username)
     user_ref.set({'password': user_data.password })
 
-def get_todos(user_id):
-    return db.collection('users').document(user_id).collection('todos').get()
+def get_daily(user_id):
+    return db.collection('users').document(user_id).collection('daily').get()
 
-def put_todo(user_id, description):
-    todos_collection_ref = db.collection('users').document(user_id).collection('todos')
-    todos_collection_ref.add({'description': description,'done':False})
+def put_daily(user_id, description):
+    daily_collection_ref = db.collection('users').document(user_id).collection('daily')
+    daily_collection_ref.add({'description': description,'done':False})
 
-def delete_todo(user_id, todo_id):
-    #todo_ref = db.collection('users').document(user_id).collection('todos').document(todo_id)
-    todo_ref = _get_todo_ref(user_id,todo_id)
-    todo_ref.delete()
+def delete_daily(user_id, daily_id):
+    #daily_ref = db.collection('users').document(user_id).collection('daily').document(daily_id)
+    daily_ref = _get_daily_ref(user_id,daily_id)
+    daily_ref.delete()
 
-def update_todo(user_id, todo_id, done):
-    todo_done = not bool(done)
-    todo_ref = _get_todo_ref(user_id,todo_id)
-    todo_ref.update({'done': todo_done})
+def update_daily(user_id, daily_id, done):
+    daily_done = not bool(done)
+    daily_ref = _get_daily_ref(user_id,daily_id)
+    daily_ref.update({'done': daily_done})
 
-def _get_todo_ref(user_id, todo_id):
-    return db.document('users/{}/todos/{}'.format(user_id,todo_id))
+def _get_daily_ref(user_id, daily_id):
+    return db.document('users/{}/daily/{}'.format(user_id,daily_id))
