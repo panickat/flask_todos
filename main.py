@@ -3,8 +3,10 @@ from flask import request, make_response, redirect, render_template, session, ur
 from flask_login import login_required, current_user
 
 from app import create_app
+
 from app.forms import dailyForm, DeletedailyForm, UpdatedailyForm
-from app.firestore_service import update_daily, get_daily, put_daily, delete_daily, update_daily
+from app.firestore_service import (update_daily, get_daily, delete_daily, update_daily,
+    put_daily_rate)
 
 app = create_app()
 
@@ -44,7 +46,8 @@ def hello():
         }
 
     if daily_form.validate_on_submit():
-        put_daily(user_id=username, description=daily_form.description.data)
+        put_daily_rate(user_id=username, user_torate='33',spent_over=False, spent_under=False,
+        well=1, poor=1) #description=daily_form.description.data)
         flash('El reporte se creo con exito')
 
         return redirect(url_for('hello'))           

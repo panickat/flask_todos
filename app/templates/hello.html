@@ -17,12 +17,12 @@
         <a href="{{ url_for('index') }}">Go to home</a>
     {% endif %}
     <div class="container">
-        <h2>Crea una nueva tarea</h2>
+        <h2>A quién deseas calificar?</h2>
         {{ wtf.quick_form(daily_form)}}
     </div>
     <ul class="list-group">
-        {% for daily in daily %}
-           {{ macros.render_daily(daily, delete_form, update_form) }}
-        {% endfor %}
+        <span class="badge">{{ daily.to_dict().spent_over}}</span>
+        <span class="badge">{{ daily.to_dict().spent_under}}</span>
+        {{daily.to_dict()}}
     </ul>
 {% endblock %} 
