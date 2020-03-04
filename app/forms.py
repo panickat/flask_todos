@@ -16,3 +16,8 @@ class DeletedailyForm(FlaskForm):
 
 class UpdatedailyForm(FlaskForm):
     submit = SubmitField('Actualizar')
+
+class SpentOverForm(FlaskForm):
+    submit = SubmitField('+')
+class SpentUnderForm(FlaskForm):
+    submit = SubmitField('-') 

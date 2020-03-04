@@ -23,6 +23,15 @@
     <ul class="list-group">
         <span class="badge">{{ daily.to_dict().spent_over}}</span>
         <span class="badge">{{ daily.to_dict().spent_under}}</span>
+
+        {{ wtf.quick_form(spentover_form, action=url_for(
+            'update_qualify',
+            daily_id=daily.id,
+            user_torate=username,
+            spent_over=False
+        ))}}
+        {{ wtf.quick_form(spentunder_form)}}
+        
         {{daily.to_dict()}}
     </ul>
 {% endblock %} 

@@ -19,3 +19,4 @@ class UserModel(UserMixin):
             password=user_doc.to_dict()['password']
         )
         return UserModel(user_data)
+
