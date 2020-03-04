@@ -24,13 +24,8 @@
         <span class="badge">{{ daily.to_dict().spent_over}}</span>
         <span class="badge">{{ daily.to_dict().spent_under}}</span>
 
-        {{ wtf.quick_form(spentover_form, action=url_for(
-            'update_qualify',
-            daily_id=daily.id,
-            user_torate=username,
-            spent_over=False
-        ))}}
-        {{ wtf.quick_form(spentunder_form)}}
+        {{ wtf.quick_form(spentover_form, action=url_for('qualify', user_torate='33', event='over') )}}
+        {{ wtf.quick_form(spentunder_form, action=url_for('qualify', user_torate='33', event='under') )}}
         
         {{daily.to_dict()}}
     </ul>
