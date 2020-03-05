@@ -4,8 +4,8 @@ from flask_login import login_required, current_user
 
 from app import create_app
 
-from app.forms import DeletedailyForm, UpdatedailyForm, SpentOverForm, SpentUnderForm, dailyForm
-from app.firestore_service import get_daily, update_qualify
+from app.forms import SpentOverForm, SpentUnderForm, searchUserForm
+from app.firestore_service import get_daily, update_qualify, get_users
 
 app = create_app()
 
@@ -35,22 +35,18 @@ def hello():
     spentover_form = SpentOverForm()
     spentunder_form = SpentUnderForm()
 
-    daily_form = dailyForm()
-    delete_form = DeletedailyForm()
-    update_form = UpdatedailyForm()
+    searchuser_form = searchUserForm()
 
     context = {
         'user_ip': user_ip,
-
+        'users': get_users(),
         'spentover_form': spentover_form,
         'spentunder_form': spentunder_form,        
         'daily': get_daily(user_id=current_user.id),
-        'daily_form': daily_form,
-        'delete_form': delete_form,
-        'update_form': update_form 
+        'searchuser_form': searchuser_form
         }
 
-    if daily_form.validate_on_submit(): # change name to usert_torate
+    if searchuser_form.validate_on_submit(): # change name to usert_torate
         #description=daily_form.description.data)
         flash('El reporte se creo con exito')
         return redirect(url_for('hello'))           

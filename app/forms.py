@@ -7,15 +7,8 @@ class LoginForm(FlaskForm):
     password = PasswordField('Contraseña', validators=[DataRequired()])
     submit = SubmitField('Enviar')
     
-class dailyForm(FlaskForm):
-    to_qualify = StringField('', validators=[DataRequired()])
-    submit = SubmitField('Buscar')
-
-class DeletedailyForm(FlaskForm):
-    submit = SubmitField('Borrar')
-
-class UpdatedailyForm(FlaskForm):
-    submit = SubmitField('Actualizar')
+class searchUserForm(FlaskForm):
+    listSearch = StringField('', validators=[DataRequired()],render_kw={"placeholder": "A quien te gustaría calificar?"})
 
 class SpentOverForm(FlaskForm):
     submit = SubmitField('+')
