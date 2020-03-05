@@ -3,7 +3,10 @@
 {% block head %}
     {{super()}}
     <title>{% block title %} Milieu | {% endblock %}</title>
+
+    <link rel="stylesheet" href="{{ url_for('static',filename='lib/css/mdb.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='css/main.css') }}">
+
     <link href="https://fonts.googleapis.com/css?family=Dancing+Script|Roboto&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="static/images/ipc.png" sizes="48x48">
 {%endblock%}    
@@ -23,7 +26,10 @@
     {%endfor%}
 
     {% block content %}{% endblock %}
+
     {% block scripts %}
         {{super()}}
     {%endblock%}
+    <script type="text/javascript" src="{{ url_for('static',filename='lib/js/mdb.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='js/main.js') }}"></script>
 {% endblock %}
