@@ -6,3 +6,7 @@ span {
     font-family: 'Dancing Script', cursive; 
     font-size: x-large;
 }
+
+.btn-default{
+    font-size: 8em;    
+}

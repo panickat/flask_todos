@@ -3,12 +3,12 @@
 {% block head %}
     {{super()}}
     <title>{% block title %} Milieu | {% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css?family=Dancing+Script|Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
 
     <link rel="stylesheet" href="{{ url_for('static',filename='lib/css/mdb.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='css/main.css') }}">
 
-    <link href="https://fonts.googleapis.com/css?family=Dancing+Script|Roboto&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/png" href="static/images/ipc.png" sizes="48x48">
 {%endblock%}    
 
 {% block body %}

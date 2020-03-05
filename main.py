@@ -32,26 +32,25 @@ def hello():
     user_ip = session.get('user_ip')
 
     user_torate = '33'
-    spentover_form = SpentOverForm()
-    spentunder_form = SpentUnderForm()
+    daily = get_daily(user_id=current_user.id)
 
-    searchuser_form = searchUserForm()
+    if daily.to_dict()['spent_over'] and daily.to_dict()['spent_under']: 
+        flash("Ya no tienes puntos para gastar")
+        return redirect(url_for('no_points'))   
 
     context = {
-        'user_ip': user_ip,
-        'users': get_users(),
-        'spentover_form': spentover_form,
-        'spentunder_form': spentunder_form,        
-        'daily': get_daily(user_id=current_user.id),
-        'searchuser_form': searchuser_form
-        }
-
-    if searchuser_form.validate_on_submit(): # change name to usert_torate
-        #description=daily_form.description.data)
-        flash('El reporte se creo con exito')
-        return redirect(url_for('hello'))           
-
+    'user_ip': user_ip,
+    'users': get_users(),
+    'spentover_form': SpentOverForm(),
+    'spentunder_form': SpentUnderForm(),
+    'searchuser_form': searchUserForm(), 
+    'daily': daily
+    }
     return render_template('hello.html',**context)
+
+@app.route('/no_points', methods=['GET'])
+def no_points():
+    return render_template('no_points.html')
 
 @app.route('/daily/update_qualify/<user_torate>/<event>', methods=['POST'])
 def qualify(user_torate,event):
