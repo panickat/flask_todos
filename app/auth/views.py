@@ -26,7 +26,7 @@ def login():
 
                 login_user(user)
                 flash('Well come again')
-                redirect(url_for('hello'))
+                redirect(url_for('company'))
             else:
                 flash('wrong password >:(')
         else:
@@ -55,7 +55,7 @@ def signup():
             user = UserModel(user_data)
             login_user(user)
             flash('Bienvenido!')
-            return redirect(url_for('hello'))
+            return redirect(url_for('company'))
         else:
             flash('El usuario ya existe') 
 

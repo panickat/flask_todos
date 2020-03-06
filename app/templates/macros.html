@@ -1,16 +1,24 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
-{% macro render_daily(daily, delete_form, update_form) %}
-    <li class="list-group-item">
-        <span class="badge">{{ daily.to_dict().done}}</span>
-        Descripcion: <span>{{ daily.to_dict().description }}</span>
-        {{ wtf.quick_form(delete_form, action=url_for('delete',daily_id=daily.id)) }}
-        {{ wtf.quick_form(update_form, action=url_for('update',daily_id=daily.id, done=daily.to_dict().done)) }}
-    </li>
+{% macro render_users(users) %}
+    <ul class="list-group" id="myList">
+        {% for user in users %}
+            <li class="list-group-item">
+                {{user.id}}
+            </li>        
+        {% endfor %}
+    </ul>
 {% endmacro %}
 
-{% macro render_users(user) %}
-    <li class="list-group-item">
-        {{user.id}}
-    </li>
+{% macro render_faces(daily,spentover_form,spentunder_form) %}
+    <div id="faces">
+        {% if daily.to_dict().spent_over == False %}
+        {{ wtf.quick_form(spentover_form, id='over_frm', action=url_for('qualify', event='over',user_torate='') )}}
+        {% endif %}
+
+
+        {% if daily.to_dict().spent_under == False %}
+        {{ wtf.quick_form(spentunder_form, id='under_frm', action=url_for('qualify', event='under',user_torate='') )}}
+        {% endif %}
+    </div>
 {% endmacro %}

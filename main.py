@@ -20,12 +20,12 @@ def not_found(error):
 
 @app.route('/')
 def index():
-    response = make_response(redirect('/hello'))
+    response = make_response(redirect('/company'))
     return response
 
-@app.route('/hello', methods=['GET','POST'])
+@app.route('/company', methods=['GET','POST'])
 @login_required
-def hello():
+def company():
 
     user_torate = '33'
     daily = get_daily(user_id=current_user.id)
@@ -41,7 +41,7 @@ def hello():
     'searchuser_form': searchUserForm(), 
     'daily': daily
     }
-    return render_template('hello.html',**context)
+    return render_template('company.html',**context)
 
 @app.route('/no_points', methods=['GET'])
 def no_points():
@@ -50,7 +50,14 @@ def no_points():
 @app.route('/daily/update_qualify/<event>/<user_torate>', methods=['POST'])
 def qualify(event,user_torate):
     update_qualify(user_id=current_user.id, user_torate=user_torate, event=event)
-    return redirect(url_for('hello'))
+    return redirect(url_for('company'))
 
-#export FLASK_APP=main.py && export FLASK_ENV=development && export FLASK_DEBUG=1 && export GOOGLE_APPLICATION_CREDENTIALS=/Users/panic/Documents/_pk/milieu.json
-print(":S")
+#settings.py
+#export FLASK_APP=main.py && export FLASK_ENV=development && export FLASK_DEBUG=1 && export GOOGLE_APPLICATION_CREDENTIALS=/Users/panic/Documents/_pk/milieu.json && WERKZEUG_DEBUG_PIN=off
+print("main run ^,..,^")
+
+
+@app.route('/debug', methods=['get'])
+def debug():
+    raise
+    return render_template('debug.html')

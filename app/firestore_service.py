@@ -33,8 +33,8 @@ def get_daily(user_id):
         return ref.get()
 
 def update_qualify(user_id, user_torate, event):
-    _spent(user_id,event)
-    _point(user_torate,event)
+    _spent(user_id, event)
+    _point(user_id, user_torate, event)
 
 def _spent(user_id,event):
     try:
@@ -43,9 +43,9 @@ def _spent(user_id,event):
     except NotFound: #https://google-cloud-python.readthedocs.io/en/0.32.0/_modules/google/api_core/exceptions.html#NotFound
         ref.set({ 'spent_over': True, 'spent_under': False}) if event == 'over' else ref.set({ 'spent_over': False, 'spent_under': True})
 
-def _point(user_torate,event):
+def _point(user_id, user_torate, event):
     try:
         ref = profile(user_torate)
-        ref.update({ 'point_'+event: 1 })
+        ref.update({ 'point_'+event: 1,'rated_by': user_id })
     except NotFound:
-        ref.set({ 'spent_over': False, 'spent_under': False, 'point_'+event: 1 })
+        ref.set({ 'spent_over': False, 'spent_under': False, 'point_'+event: 1, 'rated_by': user_id })
