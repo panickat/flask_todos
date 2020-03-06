@@ -20,26 +20,21 @@ def not_found(error):
 
 @app.route('/')
 def index():
-    user_ip = request.remote_addr
-
     response = make_response(redirect('/hello'))
-    session['user_ip'] = user_ip 
     return response
 
 @app.route('/hello', methods=['GET','POST'])
 @login_required
 def hello():
-    user_ip = session.get('user_ip')
 
     user_torate = '33'
     daily = get_daily(user_id=current_user.id)
 
-    if daily.to_dict()['spent_over'] and daily.to_dict()['spent_under']: 
+    if daily.to_dict()['spent_over'] and daily.to_dict()['spent_under']: # pending try builtins.KeyError -> KeyError: 'spent_over' when field spen_x not exist but document whether
         flash("Ya no tienes puntos para gastar")
         return redirect(url_for('no_points'))   
 
     context = {
-    'user_ip': user_ip,
     'users': get_users(),
     'spentover_form': SpentOverForm(),
     'spentunder_form': SpentUnderForm(),
@@ -52,8 +47,8 @@ def hello():
 def no_points():
     return render_template('no_points.html')
 
-@app.route('/daily/update_qualify/<user_torate>/<event>', methods=['POST'])
-def qualify(user_torate,event):
+@app.route('/daily/update_qualify/<event>/<user_torate>', methods=['POST'])
+def qualify(event,user_torate):
     update_qualify(user_id=current_user.id, user_torate=user_torate, event=event)
     return redirect(url_for('hello'))
 

@@ -12,11 +12,12 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Enviar')
     
 class searchUserForm(FlaskForm):
-    listSearch = StringField('', validators=[DataRequired()],render_kw={"placeholder": ""})
+    listSearch = StringField('', validators=[DataRequired()],render_kw={"placeholder": "A quien te gustarìa calificar?"})
 
 class InlineButtonWidget(object):
-    def __init__(self, css_class):
+    def __init__(self, css_class,face):
         self.css_class =css_class
+        self.face=face
     """
     Render a basic ``<button>`` field.
     """
@@ -24,16 +25,16 @@ class InlineButtonWidget(object):
     html_params = staticmethod(html_params)
 
     def __call__(self, field, **kwargs):
-        kwargs.setdefault('id', field.id)
+        kwargs.setdefault('id', self.face)
         kwargs.setdefault('type', self.input_type)
         kwargs.setdefault('value', field.label.text)
-        return HTMLString('<button class="'+ self.css_class +'" %s>' % self.html_params(name=field.name, **kwargs))
+        return HTMLString('<button class="'+ self.css_class +'" %s disabled>' % self.html_params(name=field.name, **kwargs))
 
 
 class Wink(BooleanField):
-    widget = InlineButtonWidget('btn btn-default fas fa-grin-wink')
+    widget = InlineButtonWidget('btn btn-default fas fa-grin-wink',"over")
 class Engry(BooleanField):
-    widget = InlineButtonWidget('btn btn-default fas fa-angry')    
+    widget = InlineButtonWidget('btn btn-default fas fa-angry',"under")    
     
 class SpentOverForm(FlaskForm):
     submit = Wink('')
