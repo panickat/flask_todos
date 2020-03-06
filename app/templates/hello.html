@@ -18,7 +18,7 @@
     {% endif %}
 
     <div class="container">
-        {{ wtf.quick_form(searchuser_form, action=url_for('qualify', user_torate='33', event='over') )}}
+        {{ wtf.quick_form(searchuser_form,id='search_user') }}
         <br>
         <ul class="list-group" id="myList">
             {% for user in users %}
@@ -26,11 +26,11 @@
             {% endfor %}
         </ul>
         {% if daily.to_dict().spent_over == False %}
-            {{ wtf.quick_form(spentover_form, action=url_for('qualify', user_torate='33', event='over') )}}
+            {{ wtf.quick_form(spentover_form, id='over_frm', action=url_for('qualify', event='over',user_torate='') )}}
         {% endif %}
 
         {% if daily.to_dict().spent_under == False %}
-            {{ wtf.quick_form(spentunder_form, action=url_for('qualify', user_torate='33', event='under') )}}
+            {{ wtf.quick_form(spentunder_form, id='under_frm', action=url_for('qualify', event='under',user_torate='') )}}
         {% endif %}
     </div>   
         
