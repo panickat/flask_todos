@@ -5,7 +5,7 @@ from flask_login import login_required, current_user
 from app import create_app
 
 from app.forms import SpentOverForm, SpentUnderForm, searchUserForm
-from app.firestore_service import get_daily, update_qualify, get_users, profiles
+from app.firestore_service import get_daily, update_qualify, get_users
 
 app = create_app()
 
@@ -27,7 +27,6 @@ def index():
 @login_required
 def company():
 
-    user_torate = '33'
     daily = get_daily(user_id=current_user.id)
 
     if daily.to_dict()['spent_over'] and daily.to_dict()['spent_under']: # pending try builtins.KeyError -> KeyError: 'spent_over' when field spen_x not exist but document whether
@@ -58,8 +57,8 @@ print("main run ^,..,^")
 
 @app.route('/debug', methods=['get'])
 def debug():
-    count = profiles(current_user.id)
-    print("########### main count: ", count)
+    
+
 
 
     return render_template('debug.html')

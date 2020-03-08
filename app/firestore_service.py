@@ -1,14 +1,19 @@
+from datetime import datetime
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
-from datetime import date
-from google.api_core.exceptions import NotFound
+from google.cloud import firestore as gcloud_firestore
 
 credentials = credentials.ApplicationDefault()
 firebase_admin.initialize_app(credentials)
 
 db = firestore.client()
-today = date.today().strftime("%d%m%y")
+
+def today():
+    #today = date.today().strftime("%d%m%y")
+    #import calendar | calendar.monthrange(year, month)[1]
+    now = datetime.now()
+    return datetime.timestamp(datetime(now.year, now.month, now.day, 0, 0, 1, 0)) #convert to datetime use->fromtimestamp()  | Marca de tiempo del servidor 'timestamp': firestore.SERVER_TIMESTAMP
 
 def get_users():
     return db.collection('users').get()
@@ -20,62 +25,57 @@ def user_put(user_data):
     user_ref = db.collection('users').document(user_data.username)
     user_ref.set({'password': user_data.password })
 
-def daily_profile(user_id):
-    return db.document('users/{}/profile/{}'.format(user_id,today)) # db.collection('users').document(user_torate).collection('profile').document(today)
+def edit_profile(user_id,dict_set,dict_update,return_get):
+    ref = db.document( 'users/{}/profile/{}'.format(user_id,today()) )
+    get = ref.get()
+
+    if get.exists:
+        if dict_update: ref.update(dict_update)
+    else:
+        ref.set(dict_set)
+        if return_get: get = ref.get()
+    
+    if return_get: return get
     
 def get_daily(user_id):
-    ref = daily_profile(user_id)
-    _get = ref.get()
-    if _get.exists:
-        return _get
-    else:
-        ref.set({ 'spent_over': False, 'spent_under': False})
-        return ref.get()
+    return edit_profile(return_get=True, user_id=user_id, dict_update=None, dict_set={ 'spent_over': False, 'spent_under': False, 'day': today()})
 
 def update_qualify(user_id, user_torate, event):
     _spent(user_id, event)
     _point(user_id, user_torate, event)
 
 def _spent(user_id,event):
-    try:
-        ref = daily_profile(user_id)
-        ref.update({ 'spent_'+event: True })
-    except NotFound: #https://google-cloud-python.readthedocs.io/en/0.32.0/_modules/google/api_core/exceptions.html#NotFound
-        ref.set({ 'spent_over': True, 'spent_under': False}) if event == 'over' else ref.set({ 'spent_over': False, 'spent_under': True})
+
+    if event == 'over': 
+        dict_set = { 'spent_over': True, 'spent_under': False, 'day': today()} 
+    else:
+        dict_set = { 'spent_over': False, 'spent_under': True, 'day': today()} 
+
+    edit_profile(
+        user_id=user_id,
+        return_get=False,
+        dict_update={ 'spent_'+event: True },
+        dict_set=dict_set
+        )
 
 def _point(user_id, user_torate, event):
-    try:
-        ref = daily_profile(user_torate)
-        ref.update({ 'point_'+event: 1,'rated_by': user_id })
-    except NotFound:
-        ref.set({ 'spent_over': False, 'spent_under': False, 'point_'+event: 1, 'rated_by': user_id })
+    def switch_event(event):
+        return {
+            'over': 'under',
+            'under': 'over'
+            }[event]
 
-from google.cloud.firestore_v1.field_path import FieldPath # https://stackoverflow.com/questions/47876754/query-firestore-database-for-document-id
-def profiles(user_id):
-    print("##########  service: ")
-    query = db.collection('users/cris/profile').where(FieldPath.document_id(),'==','050320')
-    #query = db.collection('users/cris/profile').where(FieldPath.document_id(),'in',['050320','060320'])
+    edit_profile(
+        return_get=False,
+        user_id=user_torate,
+        dict_update={ 'point_'+event: gcloud_firestore.Increment(1), event+'_by': gcloud_firestore.ArrayUnion([user_id]) },
+        dict_set={ 'spent_over': False, 'spent_under': False, 'point_'+event: 1,'point_'+switch_event(event): 0, event+'_by': gcloud_firestore.ArrayUnion([user_id]), 'day': today() }
+    )
 
-    print(query)
-    docs = query.stream()
-    print(docs)
-    over = 0
-    i = 0
+def this_month(user_id):
+    now = datetime.now()
+    from_timestamp = datetime.timestamp(datetime(now.year, now.month, 1, 0, 0, 1, 0))
+    return db.collection('users/{}/profile'.format(user_id)).where('day','>=',from_timestamp).where('day', '<=',today()).stream()
 
-    for doc in docs:
-        i += 1
-        print("# enter in for:")
-        print(i,doc)
-        #over += doc.to_dict()['point_over']
-    return over
-    #raise Exception("cris exeption")
-""" def profiles(user_id):
-    print("##########  service: ")
-    stream = db.collection('users/cris/profile').where('point_over', '==',1).stream()
-    print(stream)
-    for doc in stream:
-        print("##########  doc: ", doc.to_dict())
-
-    return 0 """
-    #https://googleapis.dev/python/firestore/latest/collection.html
-    #https://googleapis.dev/python/firestore/latest/query.html
+def all_time(user_id):
+    return db.collection('users/{}/profile'.format(user_id)).where('day', '<=',today()).stream()
