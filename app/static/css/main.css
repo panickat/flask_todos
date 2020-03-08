@@ -7,6 +7,13 @@ span {
     font-size: x-large;
 }
 
-.btn-default{
-    font-size: 8em;    
+#faces i{
+     font-size: 15em;
+}
+#over_frm, #under_frm{
+    display: inline-block;
+}
+
+#faces{
+    text-align: center;
 }

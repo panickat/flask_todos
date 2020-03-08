@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% import 'macros.html' as macros %} 
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block title %} 
+    {{ super() }}
+    Reportes IPC 
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {{ wtf.quick_form(searchuser_form,id='search_user') }}
+        <br>
+        {{ macros.render_users(users) }}
+        {{ macros.render_faces(daily,spentover_form,spentunder_form) }}
+    </div>   
+{% endblock %} 
