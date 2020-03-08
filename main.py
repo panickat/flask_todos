@@ -5,7 +5,7 @@ from flask_login import login_required, current_user
 from app import create_app
 
 from app.forms import SpentOverForm, SpentUnderForm, searchUserForm
-from app.firestore_service import get_daily, update_qualify, get_users
+from app.firestore_service import get_daily, update_qualify, get_users, profiles
 
 app = create_app()
 
@@ -56,8 +56,10 @@ def qualify(event,user_torate):
 #export FLASK_APP=main.py && export FLASK_ENV=development && export FLASK_DEBUG=1 && export GOOGLE_APPLICATION_CREDENTIALS=/Users/panic/Documents/_pk/milieu.json && WERKZEUG_DEBUG_PIN=off
 print("main run ^,..,^")
 
-
 @app.route('/debug', methods=['get'])
 def debug():
-    raise
+    count = profiles(current_user.id)
+    print("########### main count: ", count)
+
+
     return render_template('debug.html')
