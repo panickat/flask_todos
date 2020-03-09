@@ -30,6 +30,9 @@
     {% block scripts %}
         {{super()}}
     {%endblock%}
+    
+    <script type="text/javascript" src="{{ url_for('static',filename='js/moment.min.js') }}"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
     <script type="text/javascript" src="{{ url_for('static',filename='lib/js/mdb.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static',filename='js/main.js') }}"></script>
 {% endblock %}
