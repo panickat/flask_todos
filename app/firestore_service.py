@@ -2,7 +2,6 @@ from datetime import datetime
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
-from google.api_core.exceptions import NotFound
 from google.cloud import firestore as gcloud_firestore
 
 credentials = credentials.ApplicationDefault()
