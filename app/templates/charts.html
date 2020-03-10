@@ -1,5 +1,4 @@
 {% extends 'base_chart.html' %}
-{% import 'bootstrap/wtf.html' as wtf %}
 
 {% block content %}
  <br>
@@ -133,12 +132,19 @@
     });
 </script>
 
+
 {% block container %}
+<br>
+{{ data  }}
+<br>
 <ul>
     {% for field in data %}
     
         <li>
-        {{field.to_dict()}}
+        {{ field }}
+            <ul>
+                <li> {{ data[field] }} </li>
+            </ul>
         </li>
     {% endfor %}
     </ul>

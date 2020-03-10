@@ -1,3 +1,5 @@
+from collections import Counter # https://stackoverflow.com/questions/10461531/merge-and-sum-of-two-dictionaries/10461916
+
 import unittest
 from flask import request, make_response, redirect, render_template, session, url_for, flash
 from flask_login import login_required, current_user
@@ -53,10 +55,19 @@ def qualify(event,user_torate):
 
 @app.route('/charts', methods=['GET'])
 def charts():
-    data = all_time(user_id=current_user.id)
+    users_collection, gen_query = {}, all_time(user_id=current_user.id)
+    
+    for snapshot in gen_query:
+        doc = snapshot.to_dict()
+
+        if 'point_over' in doc:
+            if doc['user'] in users_collection:
+                users_collection[doc['user']]['point_over'] = doc['point_over'] + users_collection[doc['user']]['point_over']
+            else:
+                users_collection.update({ doc['user']: {'point_over': doc['point_over']} })
 
     context = {
-        'data': data
+        'data': users_collection
     }
     return render_template('charts.html', **context)
 
@@ -66,8 +77,4 @@ print("main run ^,..,^")
 
 @app.route('/debug', methods=['get'])
 def debug():
-    
-
-
-
     return render_template('debug.html')

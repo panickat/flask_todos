@@ -1,8 +1,10 @@
 from datetime import datetime
+
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 from google.cloud import firestore as gcloud_firestore
+
 
 credentials = credentials.ApplicationDefault()
 firebase_admin.initialize_app(credentials)
@@ -71,7 +73,8 @@ def _point(user_id, user_torate, event):
         return_get=False,
         user_id=user_torate,
         dict_update={ 'point_'+event: gcloud_firestore.Increment(1), event+'_by': gcloud_firestore.ArrayUnion([user_id]) },
-        dict_set={ 'spent_over': False, 'spent_under': False, 'point_'+event: 1,'point_'+switch_event(event): 0, event+'_by': gcloud_firestore.ArrayUnion([user_id]), 'day': today() }
+        #dict_set={ 'spent_over': False, 'spent_under': False, 'point_'+event: 1,'point_'+switch_event(event): 0, event+'_by': gcloud_firestore.ArrayUnion([user_id]), 'day': today() }
+        dict_set={ 'spent_over': False, 'spent_under': False, 'point_'+event: 1, event+'_by': gcloud_firestore.ArrayUnion([user_id]), 'day': today() } #remove 0
     )
 
 def this_month(user_id):
