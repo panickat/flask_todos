@@ -3,12 +3,22 @@
 {% block head %}
     {{super()}}
     <title>{% block title %} Milieu | {% endblock %}</title>
-    <!-- <link href="https://fonts.googleapis.com/css?family=Dancing+Script|Roboto&display=swap" rel="stylesheet"> -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
 
     <link rel="stylesheet" href="{{ url_for('static',filename='lib/css/mdb.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='css/main.css') }}">
 
+    <script type="text/javascript" src="{{ url_for('static',filename='js/moment.min.js') }}"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='js/utils.js') }}"></script>
+	<style>
+		canvas {
+			-moz-user-select: none;
+			-webkit-user-select: none;
+			-ms-user-select: none;
+		}
+	</style>
+    <!-- <script type="text/javascript" src="{{ url_for('static',filename='js/main.js') }}"></script> -->
 {%endblock%}    
 
 {% block body %}
@@ -31,5 +41,4 @@
         {{super()}}
     {%endblock%}
     <script type="text/javascript" src="{{ url_for('static',filename='lib/js/mdb.min.js') }}"></script>    
-    <script type="text/javascript" src="{{ url_for('static',filename='js/main.js') }}"></script>
 {% endblock %}

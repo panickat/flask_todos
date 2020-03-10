@@ -51,4 +51,5 @@ $(document).ready(function(){
     if (total_fields - nones != 1) {user=''}
     return user.trim()
   }
+
   }); 

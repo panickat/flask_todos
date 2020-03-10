@@ -26,6 +26,8 @@ def user_put(user_data):
     user_ref.set({'password': user_data.password })
 
 def edit_profile(user_id,dict_set,dict_update,return_get):
+    dict_set['user']=user_id
+
     ref = db.document( 'users/{}/profile/{}'.format(user_id,today()) )
     get = ref.get()
 
@@ -78,4 +80,5 @@ def this_month(user_id):
     return db.collection('users/{}/profile'.format(user_id)).where('day','>=',from_timestamp).where('day', '<=',today()).stream()
 
 def all_time(user_id):
-    return db.collection('users/{}/profile'.format(user_id)).where('day', '<=',today()).stream()
+    #return db.collection('users/{}/profile'.format(user_id)).where('day', '<=',today()).stream()
+    return db.collection_group('profile').stream()

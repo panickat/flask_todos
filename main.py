@@ -5,7 +5,7 @@ from flask_login import login_required, current_user
 from app import create_app
 
 from app.forms import SpentOverForm, SpentUnderForm, searchUserForm
-from app.firestore_service import get_daily, update_qualify, get_users
+from app.firestore_service import get_daily, update_qualify, get_users, all_time
 
 app = create_app()
 
@@ -50,6 +50,15 @@ def no_points():
 def qualify(event,user_torate):
     update_qualify(user_id=current_user.id, user_torate=user_torate, event=event)
     return redirect(url_for('company'))
+
+@app.route('/charts', methods=['GET'])
+def charts():
+    data = all_time(user_id=current_user.id)
+
+    context = {
+        'data': data
+    }
+    return render_template('charts.html', **context)
 
 #settings.py
 #export FLASK_APP=main.py && export FLASK_ENV=development && export FLASK_DEBUG=1 && export GOOGLE_APPLICATION_CREDENTIALS=/Users/panic/Documents/_pk/milieu.json && WERKZEUG_DEBUG_PIN=off
