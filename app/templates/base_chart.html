@@ -40,5 +40,6 @@
     {% block scripts %}
         {{super()}}
     {%endblock%}
-    <script type="text/javascript" src="{{ url_for('static',filename='lib/js/mdb.min.js') }}"></script>    
+    <script type="text/javascript" src="{{ url_for('static',filename='lib/js/mdb.min.js') }}"></script>   
+    <script type="text/javascript" src="{{ url_for('static',filename='js/horizontal_chart.js') }}"></script> 
 {% endblock %}

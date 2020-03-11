@@ -60,18 +60,14 @@ def charts():
 
     def merge_fields(doc,fields):
         for field in fields:
-            print("#for: ", doc['user'])
 
             if not doc['user'] in users_collection: users_collection[doc['user']] = {}
             if field in doc:
                 
                 if exists(users_collection, [  doc['user'], field  ] ):
-                    print("     if: ",doc[field] ," + ", users_collection[doc['user']][field])
                     users_collection[doc['user']][field] = doc[field] + users_collection[doc['user']][field]
                 else:
-                    print("     else: ",{field: doc[field]})
-                    users_collection[doc['user']][field] = doc[field] # simes overwrite user:{point_x}   
-                    #users_collection.update({ doc['user']: {field: doc[field]} })
+                    users_collection[doc['user']][field] = doc[field] 
             print("#Merge ",field,"| users_coll",users_collection)
     
     for snapshot in gen_query:
