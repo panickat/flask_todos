@@ -42,7 +42,7 @@ def edit_profile(user_id,dict_set,dict_update,return_get):
     if return_get: return get
     
 def get_daily(user_id):
-    return edit_profile(return_get=True, user_id=user_id, dict_update=None, dict_set={ 'spent_over': False, 'spent_under': False, 'day': today()})
+    return edit_profile(return_get=True, user_id=user_id, dict_update=None, dict_set={ 'spent_over': 0, 'spent_under': 0, 'day': today()})
 
 def update_qualify(user_id, user_torate, event):
     _spent(user_id, event)
@@ -51,14 +51,14 @@ def update_qualify(user_id, user_torate, event):
 def _spent(user_id,event):
 
     if event == 'over': 
-        dict_set = { 'spent_over': True, 'spent_under': False, 'day': today()} 
+        dict_set = { 'spent_over': 1, 'spent_under': 0, 'day': today()} 
     else:
-        dict_set = { 'spent_over': False, 'spent_under': True, 'day': today()} 
+        dict_set = { 'spent_over': 0, 'spent_under': 1, 'day': today()} 
 
     edit_profile(
         user_id=user_id,
-        return_get=False,
-        dict_update={ 'spent_'+event: True },
+        return_get=0,
+        dict_update={ 'spent_'+event: 1 },
         dict_set=dict_set
         )
 
@@ -70,11 +70,11 @@ def _point(user_id, user_torate, event):
             }[event]
 
     edit_profile(
-        return_get=False,
+        return_get=0,
         user_id=user_torate,
         dict_update={ 'point_'+event: gcloud_firestore.Increment(1), event+'_by': gcloud_firestore.ArrayUnion([user_id]) },
-        #dict_set={ 'spent_over': False, 'spent_under': False, 'point_'+event: 1,'point_'+switch_event(event): 0, event+'_by': gcloud_firestore.ArrayUnion([user_id]), 'day': today() }
-        dict_set={ 'spent_over': False, 'spent_under': False, 'point_'+event: 1, event+'_by': gcloud_firestore.ArrayUnion([user_id]), 'day': today() } #remove 0
+        #dict_set={ 'spent_over': 0, 'spent_under': 0, 'point_'+event: 1,'point_'+switch_event(event): 0, event+'_by': gcloud_firestore.ArrayUnion([user_id]), 'day': today() }
+        dict_set={ 'spent_over': 0, 'spent_under': 0, 'point_'+event: 1, event+'_by': gcloud_firestore.ArrayUnion([user_id]), 'day': today() } #remove 0
     )
 
 def this_month(user_id):

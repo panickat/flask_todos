@@ -11,6 +11,7 @@ from app.firestore_service import get_daily, update_qualify, get_users, all_time
 
 app = create_app()
 
+
 @app.cli.command()
 def test():
     tests = unittest.TestLoader().discover('tests')
@@ -56,15 +57,27 @@ def qualify(event,user_torate):
 @app.route('/charts', methods=['GET'])
 def charts():
     users_collection, gen_query = {}, all_time(user_id=current_user.id)
+
+    def merge_fields(doc,fields):
+        for field in fields:
+            print("#for: ", doc['user'])
+
+            if not doc['user'] in users_collection: users_collection[doc['user']] = {}
+            if field in doc:
+                
+                if exists(users_collection, [  doc['user'], field  ] ):
+                    print("     if: ",doc[field] ," + ", users_collection[doc['user']][field])
+                    users_collection[doc['user']][field] = doc[field] + users_collection[doc['user']][field]
+                else:
+                    print("     else: ",{field: doc[field]})
+                    users_collection[doc['user']][field] = doc[field] # simes overwrite user:{point_x}   
+                    #users_collection.update({ doc['user']: {field: doc[field]} })
+            print("#Merge ",field,"| users_coll",users_collection)
     
     for snapshot in gen_query:
-        doc = snapshot.to_dict()
+        merge_fields(doc = snapshot.to_dict(), fields = ('point_over','point_under','spent_over','spent_under'))
 
-        if 'point_over' in doc:
-            if doc['user'] in users_collection:
-                users_collection[doc['user']]['point_over'] = doc['point_over'] + users_collection[doc['user']]['point_over']
-            else:
-                users_collection.update({ doc['user']: {'point_over': doc['point_over']} })
+
 
     context = {
         'data': users_collection
@@ -78,3 +91,8 @@ print("main run ^,..,^")
 @app.route('/debug', methods=['get'])
 def debug():
     return render_template('debug.html')
+
+def exists(obj, chain):
+    _key = chain.pop(0)
+    if _key in obj:
+        return exists(obj[_key], chain) if chain else obj[_key]
