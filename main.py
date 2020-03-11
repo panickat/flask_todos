@@ -1,4 +1,5 @@
 from collections import Counter # https://stackoverflow.com/questions/10461531/merge-and-sum-of-two-dictionaries/10461916
+import json
 
 import unittest
 from flask import request, make_response, redirect, render_template, session, url_for, flash
@@ -56,6 +57,10 @@ def qualify(event,user_torate):
 
 @app.route('/charts', methods=['GET'])
 def charts():
+    return render_template('charts.html')
+
+@app.route('/charts/get_alltime', methods=['GET'])
+def get_alltime():
     users_collection, gen_query = {}, all_time(user_id=current_user.id)
 
     def merge_fields(doc,fields):
@@ -68,17 +73,11 @@ def charts():
                     users_collection[doc['user']][field] = doc[field] + users_collection[doc['user']][field]
                 else:
                     users_collection[doc['user']][field] = doc[field] 
-            print("#Merge ",field,"| users_coll",users_collection)
     
     for snapshot in gen_query:
         merge_fields(doc = snapshot.to_dict(), fields = ('point_over','point_under','spent_over','spent_under'))
 
-
-
-    context = {
-        'data': users_collection
-    }
-    return render_template('charts.html', **context)
+    return json.dumps(users_collection)        
 
 #settings.py
 #export FLASK_APP=main.py && export FLASK_ENV=development && export FLASK_DEBUG=1 && export GOOGLE_APPLICATION_CREDENTIALS=/Users/panic/Documents/_pk/milieu.json && WERKZEUG_DEBUG_PIN=off

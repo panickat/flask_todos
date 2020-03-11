@@ -1,30 +1,12 @@
 $(document).ready(function(){
- 
-    var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+     
+    var MONTHS = ['months'];
     var color = Chart.helpers.color;
     var colorNames = Object.keys(window.chartColors);
     
     var horizontalBarChartData = { // all Bars
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-        datasets: [{
-            label: 'Dataset 1',
-            backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
-            borderColor: window.chartColors.red,
-            borderWidth: 1,
-            data: [
-                //long for each bar
-                1
-    
-            ]
-        }, {
-            label: 'Dataset 2',
-            backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
-            borderColor: window.chartColors.blue,
-            data: [
-                1
-            ]
-        }]
-    
+        labels: ['labels'],
+        datasets: []
     };
     
     window.onload = function() {
@@ -35,6 +17,7 @@ $(document).ready(function(){
             options: {
                 // Elements options apply to all of the options unless overridden in a dataset
                 // In this case, we are setting the border of each horizontal bar to be 2px wide
+
                 elements: {
                     rectangle: {
                         borderWidth: 2,
@@ -47,13 +30,19 @@ $(document).ready(function(){
                 title: {
                     display: true,
                     text: 'Chart.js Horizontal Bar Chart'
+                },
+                layout: {
+                    padding: {
+                        left: 50,                
+                        right: 50,
+                    }
                 }
             }
         });
     
     };
     
-    /*     $('#randomizeData').on('click', function() {
+         $('#randomizeData').on('click', function() {
         var zero = Math.random() < 0.2 ? true : false;
         horizontalBarChartData.datasets.forEach(function(dataset) {
             dataset.data = dataset.data.map(function() {
@@ -62,16 +51,15 @@ $(document).ready(function(){
     
         });
         window.myHorizontalBar.update();
-    }); */
+    }); 
     
-    x =0;
-    $('#addData').on('click', function() { x +=1;
+    $('#addData').on('click', function() { 
         if (horizontalBarChartData.datasets.length > 0) {
             var month = MONTHS[horizontalBarChartData.labels.length % MONTHS.length];
             horizontalBarChartData.labels.push(month);
     
             for (var index = 0; index < horizontalBarChartData.datasets.length; ++index) {
-                horizontalBarChartData.datasets[index].data.push(x);
+                horizontalBarChartData.datasets[index].data.push(1);
             }
     
             window.myHorizontalBar.update();
@@ -83,21 +71,36 @@ $(document).ready(function(){
         window.myHorizontalBar.update();
     });
     
-     $('#addDataset').on('click', function() { console.log("add dataset")
-        var colorName = colorNames[horizontalBarChartData.datasets.length % colorNames.length];
-        var dsColor = window.chartColors[colorName];
+
+    function ds(name,dsColor){
         var newDataset = {
-            label: 'Dataset ' + (horizontalBarChartData.datasets.length + 1),
+            label: name,
             backgroundColor: color(dsColor).alpha(0.5).rgbString(),
             borderColor: dsColor,
-            data: []
+            data: [] 
         };
+        return newDataset;
+    }
     
-            newDataset.data.push(1);
-        
-    
-        horizontalBarChartData.datasets.push(newDataset);
+    $('#addDataset').on('click', function() {   
+    $.getJSON( "charts/get_alltime", function( data ) { 
+        $.each(data, function(name, obj) {
+            var colorName = colorNames[horizontalBarChartData.datasets.length % colorNames.length];
+            var dsColor = window.chartColors[colorName];
+
+            newDataset = ds(name,dsColor);
+            newDataset.data.push( obj.point_over );
+            horizontalBarChartData.datasets.push(newDataset);
+
+            newDataset = ds(name,dsColor);
+            newDataset.data.push( obj.point_under * -1 );
+            horizontalBarChartData.datasets.push(newDataset);
+        });
         window.myHorizontalBar.update();
+    });        
+    
+        
+
     });    
     
     $('#removeData').on('click', function() {
